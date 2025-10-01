@@ -4,7 +4,7 @@ import { HIcon } from '@/components/ui/icon'
 
 export function Footer() {
   return (
-    <footer className="absolute bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-t border-border">
+    <footer className="sticky bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-t border-border">
       <div className="flex items-center justify-between px-6 py-4">
         {/* Left side - Icons */}
         <div className="flex items-center space-x-4">
