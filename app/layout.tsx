@@ -30,7 +30,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <QueryProvider>
             <WalletProviders>
-              <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
                 <Layout>{children}</Layout>
                 <Toaster position="top-right" />
               </ThemeProvider>
