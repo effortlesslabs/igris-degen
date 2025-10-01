@@ -29,12 +29,6 @@ export function Suggestions() {
     )
   }
 
-  if (!suggestions || suggestions.length === 0) {
-    return (
-      <div className="flex items-center justify-center p-4 text-sm text-muted-foreground">No suggestions available</div>
-    )
-  }
-
   return (
     <div className="flex gap-2">
       {suggestions.map((suggestion, index) => (

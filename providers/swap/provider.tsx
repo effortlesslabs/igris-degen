@@ -1,9 +1,9 @@
 'use client'
-import { createContext, memo, type ReactNode, useCallback, useContext, useEffect, useMemo } from 'react'
+import { createContext, memo, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import type { UseFormSetValue } from 'react-hook-form'
 import { usePortfolio } from '@/queries/usePortfolio'
 import { useSettings } from '@/queries/useSettings'
-import { useSuggestions } from '@/queries/useSuggestions'
+import { type UseSuggestionsParams, useSuggestions } from '@/queries/useSuggestions'
 import { useSwapRoute as useSwapRouteQuery } from '@/queries/useSwapRoute'
 import type { PortfolioData } from '@/services/portfolio'
 import type { SmartTokenSuggestion, SwapRoute } from '@/types/route'
@@ -64,6 +64,8 @@ interface SwapContextState {
   timer: UseTimerReturn
   handleCompleteSwap: () => void
   handleSelectSuggestion: (suggestion: SmartTokenSuggestion) => void
+  mutateSuggestions: (input: UseSuggestionsParams) => void
+  checkDestinationTokenFromSuggestionsAndMutate: () => void
 }
 
 interface SwapProviderProps {
@@ -74,6 +76,7 @@ const SwapContext = createContext<SwapContextState | null>(null)
 
 export const SwapProvider = memo(function SwapProvider({ children }: SwapProviderProps) {
   const settings = useSettings()
+  const useSuggestionLockMutex = useRef(false)
   const walletConnection = useWalletConnectionHook()
 
   const portfolio = usePortfolio(walletConnection.loggedInAddress)
@@ -86,12 +89,7 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
     sourceAmount: swapForm.sourceAmount,
   })
 
-  const smartSuggestions = useSuggestions({
-    fromAddress: walletConnection.loggedInAddress ?? null,
-    toAddress: swapForm.toAddress,
-    sourceToken: swapForm.sourceToken,
-    sourceAmount: swapForm.sourceAmount,
-  })
+  const smartSuggestions = useSuggestions()
 
   const isInsufficientBalance = useCheckSufficientBalance({
     sourceToken: swapForm.sourceToken!,
@@ -104,6 +102,39 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
     },
     [swapForm],
   )
+
+  const mutateSuggestions = useCallback(
+    (input: UseSuggestionsParams) => {
+      smartSuggestions.mutate(input)
+      useSuggestionLockMutex.current = true
+    },
+    [smartSuggestions],
+  )
+
+  useEffect(() => {
+    if (swapRouteQuery.data && !useSuggestionLockMutex.current) {
+      mutateSuggestions({
+        fromAddress: walletConnection.loggedInAddress ?? null,
+        toAddress: swapForm.toAddress,
+        sourceToken: swapForm.sourceToken,
+        destinationToken: swapForm.destinationToken,
+        sourceAmount: swapForm.sourceAmount,
+        currentPriceImpactInPercentage: swapRouteQuery.data.totalPriceImpact.inPercentage,
+      })
+    }
+  }, [
+    swapRouteQuery.data,
+    mutateSuggestions,
+    swapForm.destinationToken,
+    swapForm.sourceToken,
+    walletConnection.loggedInAddress,
+    swapForm.sourceAmount,
+    swapForm.toAddress,
+  ])
+
+  const checkDestinationTokenFromSuggestionsAndMutate = useCallback(() => {
+    useSuggestionLockMutex.current = false
+  }, [])
 
   const timer = useTimer({
     autoStart: false,
@@ -129,7 +160,9 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
     timer.stop()
     swapForm.reset()
     execute.reset()
-  }, [timer, swapForm, execute])
+    useSuggestionLockMutex.current = false
+    smartSuggestions.reset()
+  }, [timer, swapForm, execute, smartSuggestions])
 
   const swapRoute = useMemo<SwapRouteData>(
     () => ({
@@ -162,7 +195,7 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
       swapRoute,
       suggestions: smartSuggestions.data ?? [],
       suggestionsError: smartSuggestions.error ?? null,
-      suggestionsLoading: smartSuggestions.isLoading,
+      suggestionsLoading: smartSuggestions.isPending,
       execute,
       isInsufficientBalance,
       preference: settings.preference,
@@ -170,10 +203,12 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
       timer,
       handleCompleteSwap,
       handleSelectSuggestion,
+      mutateSuggestions,
+      checkDestinationTokenFromSuggestionsAndMutate,
     }),
     [
       portfolioValues,
-      smartSuggestions.isLoading,
+      smartSuggestions.isPending,
       smartSuggestions.error,
       walletConnection,
       swapForm,
@@ -186,6 +221,8 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
       handleSelectSuggestion,
       settings.preference,
       settings.slippage,
+      mutateSuggestions,
+      checkDestinationTokenFromSuggestionsAndMutate,
     ],
   )
 

@@ -1,7 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { HIcon } from '@/components/ui/icon'
 import { useSwapContext, useSwapForm, useSwapPortfolio, useSwapRoute } from '@/providers/swap/provider'
 import RouteDetails from '../route-details'
 import Destination from './destination'
@@ -12,6 +10,7 @@ export default function Sell() {
   const { portfolio, loading } = useSwapPortfolio()
   const { isInsufficientBalance } = useSwapContext()
   const { sourceAmount, sourceToken, setValue, destinationToken } = useSwapForm()
+  const { checkDestinationTokenFromSuggestionsAndMutate } = useSwapContext()
 
   return (
     <div className="flex flex-col gap-5 w-full max-w-lg mx-auto relative">
@@ -19,8 +18,14 @@ export default function Sell() {
         portfolioTokens={portfolio.tokens}
         isLoadingPortfolio={loading}
         sourceToken={sourceToken}
-        setSourceAmount={(amount) => setValue('sourceAmount', amount)}
-        setSourceToken={(token) => setValue('sourceToken', token)}
+        setSourceAmount={(amount) => {
+          setValue('sourceAmount', amount)
+          checkDestinationTokenFromSuggestionsAndMutate()
+        }}
+        setSourceToken={(token) => {
+          setValue('sourceToken', token)
+          checkDestinationTokenFromSuggestionsAndMutate()
+        }}
         isInsufficientBalance={isInsufficientBalance}
       />
 
@@ -31,7 +36,10 @@ export default function Sell() {
             loading={isSwapRouteLoading}
             sourceToken={sourceToken}
             destinationToken={destinationToken}
-            setDestinationToken={(token) => setValue('destinationToken', token)}
+            setDestinationToken={(token) => {
+              setValue('destinationToken', token)
+              checkDestinationTokenFromSuggestionsAndMutate()
+            }}
           />
         </div>
       )}

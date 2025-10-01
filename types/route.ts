@@ -121,11 +121,14 @@ export type SmartRouteParams = {
   senderAddress: string
   recipientAddress: string
   tokenInAddress: string
+  tokenOutAddress: string
   tokenInNetwork: Network
+  tokenOutNetwork: Network
   tokenAmount: string
   slippage?: string
-  tradeType?: 'SOURCE_BASED'
+  tradeType?: 'SOURCE_BASED' | 'DESTINATION_BASED'
   excludeBridges?: string
+  currentPriceImpactInPercentage: string
 }
 
 export type TransactionStatus = 'pending' | 'waiting' | 'delayed' | 'success' | 'failure' | 'refund'
