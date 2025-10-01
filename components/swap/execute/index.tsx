@@ -31,10 +31,10 @@ const BUTTON_TEXTS = {
 
 export const Execute = () => {
   const { isSuccess, intentData, executionSteps, startExecution, reset } = useSwapExecute()
-  const { type, swapForm, swapRoute, handleCompleteSwap } = useSwapContext()
+  const { swapForm, swapRoute, handleCompleteSwap } = useSwapContext()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  const buttonState = type === 'buy' ? computeBuyButtonState() : computeSellButtonState()
+  const buttonState = computeSellButtonState()
 
   const handleDialogOpenChange = (open: boolean) => {
     setIsDialogOpen(open)
@@ -71,11 +71,7 @@ export const Execute = () => {
       </DialogTrigger>
       <DialogContent className="w-[430px] pb-5" onInteractOutside={(e) => e.preventDefault()}>
         <DialogTitle className="text-muted-foreground">
-          {isSuccess ? (
-            <span>Transaction Details</span>
-          ) : (
-            <span>{type === 'buy' ? 'your are buying' : 'your are selling'}</span>
-          )}
+          {isSuccess ? <span>Transaction Details</span> : <span>your are selling</span>}
         </DialogTitle>
         {!isSuccess && (
           <DialogDescription className="text-xs font-thin">
@@ -85,11 +81,11 @@ export const Execute = () => {
         {!isSuccess && (
           <>
             <div className="flex flex-col gap-2 py-3">
-              <div className={cn('flex flex-col gap-2', type === 'sell' && 'flex-col-reverse')}>
+              <div className={cn('flex flex-col gap-2')}>
                 {swapForm.destinationToken && (
                   <Destination destinationToken={swapForm.destinationToken} swapRoute={swapRoute.swapRoute} />
                 )}
-                <p className="text-muted-foreground font-semibold">{type === 'buy' ? 'with' : 'for'}</p>
+                <p className="text-muted-foreground font-semibold">for</p>
                 {swapForm.sourceToken && <Source sourceToken={swapForm.sourceToken} swapRoute={swapRoute.swapRoute} />}
               </div>
             </div>

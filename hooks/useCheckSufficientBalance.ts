@@ -1,16 +1,12 @@
 import { useMemo } from 'react'
-import { useSettingStore } from '@/stores/setting-store'
+import { useSwapForm } from '@/providers/swap/provider'
 
 export const useCheckSufficientBalance = () => {
-  const { type } = useSettingStore()
+  const { sourceAmount, sourceToken, destinationToken } = useSwapForm()
 
   const isSufficientBalance = useMemo(() => {
-    if (type === 'buy') {
-      return true
-    }
-
-    return false
-  }, [type])
+    return sourceAmount !== '0' && sourceToken && destinationToken
+  }, [sourceAmount, sourceToken, destinationToken])
 
   return isSufficientBalance
 }
