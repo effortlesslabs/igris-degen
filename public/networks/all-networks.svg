@@ -1,0 +1,24 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background square -->
+  <rect width="24" height="24" rx="4" fill="#1a1a1a"/>
+  
+  <!-- Top-Left: Ethereum -->
+  <rect x="2" y="2" width="10" height="10" rx="2" fill="white" stroke="#1a1a1a" stroke-width="0.5"/>
+  <path d="M7 6L9 8L7 10L5 8L7 6Z" fill="#6f6f6f"/>
+  
+  <!-- Top-Right: Arbitrum -->
+  <rect x="12" y="2" width="10" height="10" rx="2" fill="white" stroke="#1a1a1a" stroke-width="0.5"/>
+  <path d="M17 6L19 8L17 10L15 8L17 6Z" fill="#ff6b9d"/>
+  <path d="M16 7L18 8L16 9L14 8L16 7Z" fill="white"/>
+  
+  <!-- Bottom-Left: Base -->
+  <rect x="2" y="12" width="10" height="10" rx="2" fill="white" stroke="#1a1a1a" stroke-width="0.5"/>
+  <circle cx="7" cy="17" r="2" fill="#0052ff"/>
+  <rect x="6" y="16.5" width="2" height="1" fill="white"/>
+  
+  <!-- Bottom-Right: BSC -->
+  <rect x="12" y="12" width="10" height="10" rx="2" fill="white" stroke="#1a1a1a" stroke-width="0.5"/>
+  <circle cx="17" cy="17" r="2" fill="#f3ba2f"/>
+  <path d="M16 16L17 17L16 18L15 17L16 16Z" fill="#d4af37"/>
+  <path d="M18 16L19 17L18 18L17 17L18 16Z" fill="white"/>
+</svg> 
