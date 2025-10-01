@@ -57,7 +57,7 @@ export default function Destination({
               />
               {isAmountInDollar && <span> {destinationToken.symbol}</span>}
               {swapRoute?.totalPriceImpact && (
-                <span className="font-medium text-xs text-destructive/60 ml-2">
+                <span className="font-medium text-xs text-green-500 ml-2">
                   {swapRoute.totalPriceImpact.inPercentage}%
                 </span>
               )}

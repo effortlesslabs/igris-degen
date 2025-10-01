@@ -16,7 +16,7 @@ export default function Timer({ className }: TimerProps) {
           <Icon icon="lucide:hourglass" className="size-3" />
           <span className="text-sm text-muted-foreground">Reload</span>
         </div>
-        <div className="flex items-center gap-1 text-destructive font-medium">
+        <div className="flex items-center gap-1 text-primary font-medium">
           <span className="text-sm font-medium">{timeLeft}</span>
           <span className="text-xs">sec</span>
         </div>
