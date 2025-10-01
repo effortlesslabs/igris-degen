@@ -38,8 +38,13 @@ export function WalletConnection({ setIsPortfolioOpen, isLoading, totalBalance }
   // Show connected wallet display if authenticated
   if (walletConnection.authenticated && walletConnection.loggedInAddress) {
     return (
-      <div className={cn('flex items-center space-x-3', isLoading && 'animate-pulse')}>
-        <Button variant="ghost" size="lg" className="font-medium px-2" onClick={() => setIsPortfolioOpen(true)}>
+      <div
+        className={cn(
+          'flex items-center space-x-3 border border-dashed border-primary/40 hover:border-primary/60 hover:bg-primary/40 rounded-lg transition-colors',
+          isLoading && 'animate-pulse',
+        )}
+      >
+        <Button variant="ghost" size="lg" className="px-2 font-semibold" onClick={() => setIsPortfolioOpen(true)}>
           <HIcon variant="secondary" icon="oi:dollar" color={iconColors.balance} iconClassName="size-4" />
           {isBalanceHidden ? (
             <span className="text-foreground/60">••••••</span>

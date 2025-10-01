@@ -125,7 +125,7 @@ function SuggestionItem({
 
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Est. Time:</span>
-              <span className="text-sm font-medium">{suggestion.timeEstimation}</span>
+              <span className="text-sm font-medium">{suggestion.timeEstimation} sec</span>
             </div>
           </div>
         </div>

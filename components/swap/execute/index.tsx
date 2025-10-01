@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } 
 import { cn } from '@/lib/utils'
 import { useSwapContext, useSwapExecute } from '@/providers/swap/provider'
 import type { Token } from '@/types/token'
-import { computeBuyButtonState, computeSellButtonState } from './button-state'
+import { computeSellButtonState } from './button-state'
 import Destination from './destination'
 import Details from './details'
 import Source from './source'

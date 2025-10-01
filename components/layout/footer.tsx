@@ -4,8 +4,8 @@ import { HIcon } from '@/components/ui/icon'
 
 export function Footer() {
   return (
-    <footer className="sticky bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-t border-border">
-      <div className="flex items-center justify-between px-6 py-4">
+    <footer className="sticky flex justify-center items-center bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-t border-border">
+      <div className="container flex items-center justify-between px-6 py-4">
         {/* Left side - Icons */}
         <div className="flex items-center space-x-4">
           <a
@@ -19,8 +19,8 @@ export function Footer() {
         </div>
 
         {/* Right side - Text */}
-        <div className="text-base text-muted-foreground">
-          Try intent based{' '}
+        <div className="text-base font-medium text-muted-foreground">
+          try chat based{' '}
           <a
             href="https://beta.igris.bot"
             target="_blank"
