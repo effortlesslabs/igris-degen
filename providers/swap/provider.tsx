@@ -83,9 +83,7 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
     toAddress: swapForm.toAddress,
     sourceToken: swapForm.sourceToken,
     destinationToken: swapForm.destinationToken,
-    destinationAmount: swapForm.destinationAmount,
     sourceAmount: swapForm.sourceAmount,
-    type: settings.type,
   })
 
   const smartSuggestions = useSuggestions({
@@ -96,10 +94,8 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
   })
 
   const isInsufficientBalance = useCheckSufficientBalance({
-    type: settings.type,
     sourceToken: swapForm.sourceToken!,
     sourceAmount: swapForm.sourceAmount,
-    swapRoute: swapRouteQuery.data!,
   })
 
   const handleSelectSuggestion = useCallback(

@@ -8,24 +8,13 @@ interface UseQuoteParams {
   toAddress: string | null
   sourceToken: PortfolioToken | null
   destinationToken: Token | null
-  destinationAmount: string
-  type: 'buy' | 'sell' | 'intent'
   sourceAmount: string
   enabled?: boolean
 }
 
 export function useSwapRoute(props: UseQuoteParams) {
-  const {
-    fromAddress,
-    toAddress,
-    sourceToken,
-    destinationToken,
-    destinationAmount,
-    type,
-    sourceAmount,
-    enabled = true,
-  } = props
-  const amount = type === 'sell' ? sourceAmount : destinationAmount
+  const { fromAddress, toAddress, sourceToken, destinationToken, sourceAmount, enabled = true } = props
+  const amount = sourceAmount
   return useQuery({
     queryKey: ['quote', sourceToken?.address, destinationToken?.address, amount, toAddress],
     queryFn: async () => {
@@ -41,7 +30,7 @@ export function useSwapRoute(props: UseQuoteParams) {
         tokenOutNetwork: destinationToken.network as Network,
         tokenAmount: amount,
         slippage: '50',
-        tradeType: type === 'sell' ? 'SOURCE_BASED' : 'DESTINATION_BASED',
+        tradeType: 'SOURCE_BASED',
         excludeBridges: 'gasyard',
       })
     },
