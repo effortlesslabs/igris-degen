@@ -1,4 +1,10 @@
-import type { IntentStatusResponse, RouteParams, SmartRouteParams, SwapRoute } from '../types/route'
+import type {
+  IntentStatusResponse,
+  RouteParams,
+  SmartRouteParams,
+  SmartTokenSuggestion,
+  SwapRoute,
+} from '../types/route'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_ROUTE_AGGREGATE_API_URL
 
@@ -91,7 +97,7 @@ export async function fetchSwapRoute(args: RouteParams): Promise<SwapRoute | nul
   }
 }
 
-export async function fetchSmartSwapRoute(args: SmartRouteParams): Promise<SwapRoute[]> {
+export async function fetchSmartSwapRoute(args: SmartRouteParams): Promise<SmartTokenSuggestion[]> {
   const queryParams = new URLSearchParams(args)
 
   try {

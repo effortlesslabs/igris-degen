@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { HumanizeNumber } from '@/components/ui/humanize-number'
 import { getNetworkAsset } from '@/lib/constant'
-import type { SwapRoute } from '@/types/route'
+import type { SmartTokenSuggestion } from '@/types/route'
 import type { Network } from '@/types/token'
 
 function SuggestionItem({
@@ -11,12 +11,12 @@ function SuggestionItem({
   onSelect,
   selected = false,
 }: {
-  suggestion: SwapRoute
+  suggestion: SmartTokenSuggestion
   index: number
   onSelect: () => void
   selected?: boolean
 }) {
-  const networkAsset = getNetworkAsset(suggestion.metadata.tokenOut.network as Network)
+  const networkAsset = getNetworkAsset(suggestion.tokenMeta.network as Network)
 
   return (
     <HoverCard>
@@ -45,8 +45,8 @@ function SuggestionItem({
             }`}
           >
             <Image
-              src={suggestion.metadata.tokenOut.logoURI}
-              alt={suggestion.metadata.tokenOut.symbol}
+              src={suggestion.tokenMeta.logoURI}
+              alt={suggestion.tokenMeta.symbol}
               width={24}
               height={24}
               className="w-7 h-7 rounded-full"
@@ -77,14 +77,14 @@ function SuggestionItem({
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Image
-              src={suggestion.metadata.tokenOut.logoURI}
-              alt={suggestion.metadata.tokenOut.symbol}
+              src={suggestion.tokenMeta.logoURI}
+              alt={suggestion.tokenMeta.symbol}
               width={20}
               height={20}
               className="w-5 h-5 rounded-full"
             />
-            <span className="font-medium text-sm">{suggestion.metadata.tokenOut.symbol}</span>
-            <span className="text-xs text-muted-foreground">on {suggestion.metadata.tokenOut.network}</span>
+            <span className="font-medium text-sm">{suggestion.tokenMeta.symbol}</span>
+            <span className="text-xs text-muted-foreground">on {suggestion.tokenMeta.network}</span>
             {selected && (
               <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">Selected</span>
             )}
@@ -96,7 +96,7 @@ function SuggestionItem({
               <div className="text-right flex gap-1">
                 <div className="font-medium">
                   <HumanizeNumber prefix="" number={suggestion.tokenOut.rawAmountFormatted} />{' '}
-                  {suggestion.metadata.tokenOut.symbol}
+                  {suggestion.tokenMeta.symbol}
                 </div>
                 ({' '}
                 <div className="text-muted-foreground">

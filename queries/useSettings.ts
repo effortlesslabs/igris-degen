@@ -3,7 +3,6 @@ import React from 'react'
 
 // Types
 export interface Settings {
-  type: 'buy' | 'sell' | 'intent'
   preference: 'cheapest' | 'fastest'
   slippage: number
 }
@@ -12,7 +11,6 @@ const QUERY_KEY = ['settings']
 
 // Default values
 const defaultSettings: Settings = {
-  type: 'buy',
   preference: 'cheapest',
   slippage: 50,
 }
@@ -44,14 +42,6 @@ export function useSettings() {
     },
   })
 
-  // Individual setters
-  const setType = React.useCallback(
-    (type: 'buy' | 'sell' | 'intent') => {
-      updateSettingsMutation.mutate({ type })
-    },
-    [updateSettingsMutation],
-  )
-
   const setPreference = React.useCallback(
     (preference: 'cheapest' | 'fastest') => {
       updateSettingsMutation.mutate({ preference })
@@ -76,12 +66,10 @@ export function useSettings() {
     isLoading,
 
     // Individual values
-    type: settings.type,
     preference: settings.preference,
     slippage: settings.slippage,
 
     // Setters
-    setType,
     setPreference,
     setSlippage,
     reset,
@@ -90,12 +78,6 @@ export function useSettings() {
     isUpdating: updateSettingsMutation.isPending,
     error: updateSettingsMutation.error,
   }
-}
-
-// Specialized hooks for specific settings
-export function useSwapType() {
-  const { type, setType, isLoading } = useSettings()
-  return { type, setType, isLoading }
 }
 
 export function useRoutePreference() {

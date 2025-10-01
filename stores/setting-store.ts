@@ -2,10 +2,6 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface SettingState {
-  // Swap type
-  type: 'buy' | 'sell' | 'intent'
-  setType: (type: 'buy' | 'sell' | 'intent') => void
-
   // Route preference
   preference: 'cheapest' | 'fastest'
   setPreference: (preference: 'cheapest' | 'fastest') => void
@@ -19,7 +15,6 @@ interface SettingState {
 }
 
 const initialState = {
-  type: 'sell' as const,
   preference: 'cheapest' as const,
   slippage: 50,
 }
@@ -29,9 +24,6 @@ export const useSettingStore = create<SettingState>()(
     (set) => ({
       ...initialState,
 
-      setType: (type: 'buy' | 'sell' | 'intent') => {
-        set({ type })
-      },
       setPreference: (preference: 'cheapest' | 'fastest') => {
         set({ preference })
       },
@@ -49,9 +41,6 @@ export const useSettingStore = create<SettingState>()(
       onRehydrateStorage: () => (state) => {
         // Ensure the state is valid after rehydration
         if (state) {
-          if (!['buy', 'sell', 'intent'].includes(state.type)) {
-            state.type = 'buy'
-          }
           if (!['cheapest', 'fastest'].includes(state.preference)) {
             state.preference = 'cheapest'
           }

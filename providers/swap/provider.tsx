@@ -6,7 +6,7 @@ import { useSettings } from '@/queries/useSettings'
 import { useSuggestions } from '@/queries/useSuggestions'
 import { useSwapRoute as useSwapRouteQuery } from '@/queries/useSwapRoute'
 import type { PortfolioData } from '@/services/portfolio'
-import type { SwapRoute } from '@/types/route'
+import type { SmartTokenSuggestion, SwapRoute } from '@/types/route'
 import type { PortfolioToken, Token } from '@/types/token'
 import { useCheckSufficientBalance } from './useCheckSufficientBalance'
 import { type ExecuteReturn, useStepsExecute } from './useStepsExecute'
@@ -53,17 +53,17 @@ interface SwapContextState {
   portfolio: Portfolio
   swapForm: SwapForm
   swapRoute: SwapRouteData
-  suggestions: SwapRoute[]
+  suggestions: SmartTokenSuggestion[]
+  suggestionsError: Error | null
   execute: ExecuteReturn
   suggestionsLoading: boolean
   isInsufficientBalance: boolean
-  type: 'buy' | 'sell' | 'intent'
+
   preference: 'cheapest' | 'fastest'
   slippage: number
   timer: UseTimerReturn
   handleCompleteSwap: () => void
-  handleTypeChange: (type: 'buy' | 'sell' | 'intent') => void
-  handleSelectSuggestion: (suggestion: SwapRoute) => void
+  handleSelectSuggestion: (suggestion: SmartTokenSuggestion) => void
 }
 
 interface SwapProviderProps {
@@ -99,8 +99,8 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
   })
 
   const handleSelectSuggestion = useCallback(
-    (suggestion: SwapRoute) => {
-      swapForm.setValue('destinationToken', suggestion.metadata.tokenOut as Token)
+    (suggestion: SmartTokenSuggestion) => {
+      swapForm.setValue('destinationToken', suggestion.tokenMeta as Token)
     },
     [swapForm],
   )
@@ -124,14 +124,6 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
       timer.restart()
     }
   }, [swapRouteQuery.data, swapRouteQuery.isFetching, timer, execute.isExecuting])
-
-  const handleTypeChange = useCallback(
-    (type: 'buy' | 'sell' | 'intent') => {
-      settings.setType(type)
-      swapForm.reset()
-    },
-    [settings, swapForm],
-  )
 
   const handleCompleteSwap = useCallback(() => {
     timer.stop()
@@ -169,13 +161,12 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
       swapForm,
       swapRoute,
       suggestions: smartSuggestions.data ?? [],
+      suggestionsError: smartSuggestions.error ?? null,
       suggestionsLoading: smartSuggestions.isLoading,
       execute,
       isInsufficientBalance,
-      type: settings.type,
       preference: settings.preference,
       slippage: settings.slippage,
-      handleTypeChange,
       timer,
       handleCompleteSwap,
       handleSelectSuggestion,
@@ -183,17 +174,18 @@ export const SwapProvider = memo(function SwapProvider({ children }: SwapProvide
     [
       portfolioValues,
       smartSuggestions.isLoading,
+      smartSuggestions.error,
       walletConnection,
       swapForm,
       swapRoute,
       smartSuggestions.data,
       isInsufficientBalance,
-      settings,
-      handleTypeChange,
       timer,
       handleCompleteSwap,
       execute,
       handleSelectSuggestion,
+      settings.preference,
+      settings.slippage,
     ],
   )
 

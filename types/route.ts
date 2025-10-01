@@ -86,6 +86,13 @@ export interface SwapRoute {
   fees?: Record<string, Fee>
 }
 
+export interface SmartTokenSuggestion {
+  tokenOut: TokenInOut
+  tokenMeta: Token
+  totalPriceImpact: PriceImpact
+  timeEstimation: string
+}
+
 export interface RouteExecutionStatus {
   requestId: string
   status: 'pending' | 'waiting' | 'delayed' | 'success' | 'failure' | 'refund'
